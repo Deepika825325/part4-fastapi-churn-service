@@ -53,6 +53,45 @@ def test_batch_predict():
 
     assert "predictions" in data
 
+    assert isinstance(
+        data["predictions"],
+        list
+    )
+
     assert len(
         data["predictions"]
     ) == 2
+
+    for prediction in data["predictions"]:
+
+        assert "churn_probability" in prediction
+        assert "predicted_class" in prediction
+        assert "risk_level" in prediction
+        assert "risk_explanation" in prediction
+
+        assert isinstance(
+            prediction["churn_probability"],
+            float
+        )
+
+        assert 0 <= prediction["churn_probability"] <= 1
+
+        assert prediction["predicted_class"] in [
+            0,
+            1
+        ]
+
+        assert prediction["risk_level"] in [
+            "low",
+            "medium",
+            "high"
+        ]
+
+        assert isinstance(
+            prediction["risk_explanation"],
+            str
+        )
+
+        assert len(
+            prediction["risk_explanation"]
+        ) > 0

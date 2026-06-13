@@ -48,3 +48,30 @@ def test_predict():
     assert "predicted_class" in data
     assert "risk_level" in data
     assert "risk_explanation" in data
+
+    assert isinstance(
+        data["churn_probability"],
+        float
+    )
+
+    assert 0 <= data["churn_probability"] <= 1
+
+    assert data["predicted_class"] in [
+        0,
+        1
+    ]
+
+    assert data["risk_level"] in [
+        "low",
+        "medium",
+        "high"
+    ]
+
+    assert isinstance(
+        data["risk_explanation"],
+        str
+    )
+
+    assert len(
+        data["risk_explanation"]
+    ) > 0

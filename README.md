@@ -2,79 +2,180 @@
 
 ## Overview
 
-This project implements a production-ready FastAPI service for predicting customer churn risk for a Direct-to-Consumer (D2C) personal care brand.
+A production-ready FastAPI service for customer churn prediction, developed as part of the **D2C Customer Churn Intelligence & Retention API Capstone Project**.
 
-The service loads a trained machine learning model, accepts customer behavioral and engagement features, and returns:
+The application exposes REST API endpoints that allow CRM, retention, and marketing systems to score customers for churn risk, generate interpretable risk explanations, and support targeted customer retention initiatives.
 
-* Churn probability
-* Predicted churn class
-* Risk level
-* Human-readable risk explanation
+The project includes:
 
-The API is intended for internal CRM and retention teams to prioritize customer retention efforts and support data-driven decision making.
+* FastAPI prediction service
+* Scikit-Learn churn prediction model
+* Batch prediction support
+* Pydantic validation
+* Automated API testing
+* Dockerized deployment
+* Streamlit dashboard
+* Monitoring strategy
+* Responsible-use guidelines
 
 ---
 
-## Project Structure
+## Key Features
+
+* Single customer churn prediction
+* Batch churn prediction
+* Probability-based risk scoring
+* Human-readable churn explanations
+* Strong input validation using Pydantic
+* Enum validation for categorical features
+* Automated API testing with Pytest
+* Docker support for reproducible deployment
+* Streamlit-based user interface
+* Reproducible model training workflow
+* Monitoring and governance documentation
+
+---
+
+## Technology Stack
+
+* Python 3.13
+* FastAPI
+* Scikit-Learn
+* Pandas
+* NumPy
+* Pydantic
+* Uvicorn
+* Pytest
+* Streamlit
+* Docker
+
+---
+
+## Repository Structure
 
 ```text
 part4-fastapi-churn-service/
+│
+├── app/
+│   ├── main.py
+│   ├── model_loader.py
+│   ├── predictor.py
+│   ├── risk_explainer.py
+│   └── schemas.py
+│
+├── models/
+│   └── model.pkl
+│
+├── training/
+│   └── train_model.py
+│
+├── tests/
+│   ├── conftest.py
+│   ├── test_health.py
+│   ├── test_predict.py
+│   ├── test_batch_predict.py
+│   ├── test_validation.py
+│   └── test_risk_level.py
+│
+├── sample_requests/
+│   ├── single_customer.json
+│   └── batch_customers.json
+│
+├── streamlit_app.py
+├── monitoring_plan.md
+├── responsible_use.md
+├── requirements.txt
+├── Dockerfile
+├── pytest.ini
+├── .gitignore
+└── README.md
+```
 
-app/
-├── __init__.py
-├── main.py
-├── model_loader.py
-├── predictor.py
-├── risk_explainer.py
-└── schemas.py
+---
 
-training/
-└── train_model.py
+## Business Objective
 
-models/
-└── model.pkl
+The company wants to identify customers who are likely to churn within the next 60 days and prioritize retention efforts efficiently.
 
-tests/
-├── test_health.py
-├── test_predict.py
-└── test_batch_predict.py
+The API provides:
 
-sample_requests/
-├── single_customer.json
-└── batch_customers.json
+* Churn probability
+* Churn classification
+* Risk level
+* Business-friendly explanation
 
-monitoring_plan.md
-responsible_use.md
-requirements.txt
-Dockerfile
-README.md
-.gitignore
+These outputs support CRM workflows, customer success teams, and retention campaigns.
+
+---
+
+## System Architecture
+
+```text
+Streamlit Dashboard
+        │
+        ▼
+FastAPI Service
+        │
+        ▼
+Pydantic Validation
+        │
+        ▼
+Prediction Engine
+        │
+        ▼
+Scikit-Learn Pipeline
+        │
+        ▼
+Risk Explanation Engine
+        │
+        ▼
+JSON Response
 ```
 
 ---
 
 ## Model Information
 
-### Objective
+### Prediction Target
 
 Predict whether a customer is likely to churn within the next 60 days.
 
-### Algorithm
+### Model
 
 * Logistic Regression
 * Scikit-Learn Pipeline
-* OneHotEncoder for categorical features
-* StandardScaler for numerical features
+* OneHotEncoder
+* StandardScaler
 
-### Decision Threshold
-
-The API uses a churn classification threshold of:
+### Churn Classification Threshold
 
 ```text
 0.45
 ```
 
-This threshold was selected during model evaluation to balance precision and recall for retention use cases.
+The threshold was selected during model evaluation to balance precision and recall for retention-focused business decisions.
+
+---
+
+## Risk Level Definitions
+
+| Risk Level | Probability Range |
+| ---------- | ----------------- |
+| Low        | < 0.45            |
+| Medium     | 0.45 – 0.74       |
+| High       | ≥ 0.75            |
+
+Customers classified as Medium or High Risk are assigned:
+
+```text
+predicted_class = 1
+```
+
+Customers classified as Low Risk are assigned:
+
+```text
+predicted_class = 0
+```
 
 ---
 
@@ -93,7 +194,7 @@ cd part4-fastapi-churn-service
 python -m venv venv
 ```
 
-### Activate Virtual Environment
+### Activate Environment
 
 Windows:
 
@@ -117,13 +218,13 @@ pip install -r requirements.txt
 
 ## Training the Model
 
-To regenerate the trained model artifact:
+To regenerate the model artifact:
 
 ```bash
 python training/train_model.py
 ```
 
-This creates:
+Generated artifact:
 
 ```text
 models/model.pkl
@@ -131,31 +232,42 @@ models/model.pkl
 
 ---
 
-## Running the API
+## Running the FastAPI Service
 
-Start the FastAPI application:
+Start the API server:
 
 ```bash
 uvicorn app.main:app --reload
 ```
 
-API URL:
+Available URLs:
 
 ```text
+API Base URL
 http://127.0.0.1:8000
-```
 
-Swagger Documentation:
-
-```text
+Swagger UI
 http://127.0.0.1:8000/docs
-```
 
-ReDoc Documentation:
-
-```text
+ReDoc
 http://127.0.0.1:8000/redoc
 ```
+
+---
+
+## Running the Streamlit Dashboard
+
+```bash
+streamlit run streamlit_app.py
+```
+
+Application URL:
+
+```text
+http://localhost:8501
+```
+
+The dashboard connects directly to the FastAPI prediction service.
 
 ---
 
@@ -215,49 +327,39 @@ Returns churn prediction for a single customer.
 
 ```json
 {
-  "churn_probability": 0.0053,
+  "churn_probability": 0.053,
   "predicted_class": 0,
   "risk_level": "low",
-  "risk_explanation": "Customer demonstrates healthy engagement, purchasing activity, and overall behavioral patterns associated with low churn risk."
+  "risk_explanation": "Customer demonstrates strong engagement, healthy purchasing behavior, and no significant churn warning signals."
 }
 ```
+
+---
+
+### Response Fields
+
+| Field             | Description                    |
+| ----------------- | ------------------------------ |
+| churn_probability | Predicted probability of churn |
+| predicted_class   | Binary churn classification    |
+| risk_level        | Low, Medium, or High           |
+| risk_explanation  | Human-readable explanation     |
 
 ---
 
 ### POST /batch_predict
 
-Returns churn predictions for multiple customers.
+Returns predictions for multiple customers.
 
-#### Sample Request
-
-```json
-{
-  "customers": [
-    {
-      "...": "customer_1_features"
-    },
-    {
-      "...": "customer_2_features"
-    }
-  ]
-}
-```
-
-#### Sample Response
+#### Response Structure
 
 ```json
 {
   "predictions": [
     {
-      "churn_probability": 0.12,
-      "predicted_class": 0,
-      "risk_level": "low",
-      "risk_explanation": "..."
-    },
-    {
-      "churn_probability": 0.84,
+      "churn_probability": 0.48,
       "predicted_class": 1,
-      "risk_level": "high",
+      "risk_level": "medium",
       "risk_explanation": "..."
     }
   ]
@@ -266,9 +368,9 @@ Returns churn predictions for multiple customers.
 
 ---
 
-## Running Tests
+## Testing
 
-Execute all API tests:
+Run the complete test suite:
 
 ```bash
 pytest
@@ -277,32 +379,37 @@ pytest
 Expected result:
 
 ```text
-3 passed
+12 passed
 ```
 
-Test Coverage:
+### Test Coverage
 
 * Health endpoint
 * Single prediction endpoint
 * Batch prediction endpoint
+* Input validation
+* Enum validation
+* Numeric boundary validation
+* Risk threshold validation
+* Business rule validation
 
 ---
 
-## Docker Usage
+## Docker Deployment
 
-### Build Image
+### Build Docker Image
 
 ```bash
 docker build -t churn-api .
 ```
 
-### Run Container
+### Run Docker Container
 
 ```bash
 docker run -p 8000:8000 churn-api
 ```
 
-API will be available at:
+API URL:
 
 ```text
 http://localhost:8000
@@ -312,16 +419,17 @@ http://localhost:8000
 
 ## Monitoring
 
-The deployment monitoring plan is documented in:
+Deployment monitoring strategy is documented in:
 
 ```text
 monitoring_plan.md
 ```
 
-The monitoring strategy covers:
+Monitoring covers:
 
 * Data drift detection
-* Prediction distribution tracking
+* Prediction distribution monitoring
+* Model performance tracking
 * Business outcome monitoring
 * API reliability monitoring
 * Retraining triggers
@@ -330,7 +438,7 @@ The monitoring strategy covers:
 
 ## Responsible Use
 
-Responsible usage guidelines are documented in:
+Responsible-use guidance is documented in:
 
 ```text
 responsible_use.md
@@ -338,26 +446,66 @@ responsible_use.md
 
 Key principles:
 
-* Predictions support human decision making
-* Predictions should not be used as the sole basis for customer actions
-* High-risk customers should be reviewed before intervention
-* Regular fairness and performance reviews should be conducted
+* Human-in-the-loop decision making
+* Predictions support, not replace, business judgment
+* Fair and ethical customer treatment
+* Awareness of model limitations
+* Review of high-risk recommendations before action
+
+---
+
+## Reproducibility
+
+This repository is fully reproducible.
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Retrain the model:
+
+```bash
+python training/train_model.py
+```
+
+Run the API:
+
+```bash
+uvicorn app.main:app --reload
+```
+
+Run tests:
+
+```bash
+pytest
+```
+
+Run Streamlit:
+
+```bash
+streamlit run streamlit_app.py
+```
 
 ---
 
 ## Dataset Notes
 
-This project uses the modeling snapshot dataset provided as part of the capstone project.
+This project uses the modeling snapshot dataset provided as part of the capstone dataset package.
 
-Only customer information available at or before the snapshot date is used for prediction to prevent data leakage.
+Only customer information available on or before the snapshot date was used during feature engineering and model training.
 
-The API is designed as a reproducible scoring service and can retrain the model using the provided training script.
+No post-snapshot information was used, preventing target leakage and ensuring realistic deployment behavior.
 
 ---
 
 ## Author
-Deepika Kumari
 
-Capstone Project – D2C Customer Churn Intelligence & Retention API
+**Deepika Kumari**
+
+Capstone Project
+
+**D2C Customer Churn Intelligence & Retention API**
 
 Part 4: FastAPI Churn Scoring Service & Reproducible ML Workflow
