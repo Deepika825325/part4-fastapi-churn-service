@@ -19,7 +19,38 @@ The project includes:
 * Responsible-use guidelines
 
 ---
+## Live Demo
 
+### Streamlit Dashboard
+
+https://part4-fastapi-churn-service-exrsx3v2ufpswkj82kkdws.streamlit.app/
+
+### FastAPI API
+
+https://part4-fastapi-churn-service-production.up.railway.app
+
+### Swagger Documentation
+
+https://part4-fastapi-churn-service-production.up.railway.app/docs
+
+### ReDoc Documentation
+
+https://part4-fastapi-churn-service-production.up.railway.app/redoc
+
+### Health Check
+
+https://part4-fastapi-churn-service-production.up.railway.app/health
+
+### Quick Evaluation
+
+Evaluators can test the deployed application without local installation:
+
+1. Open the Streamlit Dashboard.
+2. Generate churn predictions using the user interface.
+3. Upload the sample batch CSV file.
+4. Test API endpoints through Swagger UI.
+5. Verify deployment status using the health endpoint.
+---
 ## Key Features
 
 * Single customer churn prediction
@@ -77,9 +108,10 @@ part4-fastapi-churn-service/
 │   ├── test_validation.py
 │   └── test_risk_level.py
 │
-├── sample_requests/
-│   ├── single_customer.json
-│   └── batch_customers.json
+├──  sample_requests/
+|   ├── single_customer.json
+|   ├── batch_customers.json
+|   └── churn_batch_examples.csv
 │
 ├── streamlit_app.py
 ├── monitoring_plan.md
@@ -90,9 +122,7 @@ part4-fastapi-churn-service/
 ├── .gitignore
 └── README.md
 ```
-
 ---
-
 ## Business Objective
 
 The company wants to identify customers who are likely to churn within the next 60 days and prioritize retention efforts efficiently.
@@ -284,12 +314,26 @@ Health check endpoint.
   "status": "ok"
 }
 ```
-
 ---
 
 ### POST /predict
 
 Returns churn prediction for a single customer.
+
+### Sample Batch Prediction File
+
+A sample CSV file is included for testing batch predictions:
+
+sample_requests/churn_batch_examples.csv
+
+The file contains example low-risk, medium-risk, and high-risk customers and can be uploaded directly through the Streamlit Batch Prediction interface.
+
+This allows evaluators to quickly validate:
+
+* Batch prediction functionality
+* Input validation
+* Risk classification logic
+* API response structure
 
 #### Sample Request
 

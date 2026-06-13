@@ -1,0 +1,7 @@
+city_tier,age_group,acquisition_channel,loyalty_tier,preferred_category,marketing_consent,recency_days,frequency_180d,monetary_180d,return_rate_180d,avg_discount_pct_180d,avg_rating_180d,category_diversity_180d,ticket_count_90d,negative_ticket_rate_90d,avg_resolution_hours_90d,days_since_signup,sessions_30d,product_views_30d,cart_adds_30d,wishlist_adds_30d,abandoned_carts_30d,email_opens_30d,campaign_clicks_30d,last_visit_days_ago
+Tier 1,25-34,Organic,Gold,Skin Care,Yes,10,12,15000,0.02,0.05,4.8,5,0,0.0,4,800,40,150,25,12,0,20,10,1
+Tier 1,35-44,Referral,Platinum,Hair Care,Yes,15,10,12000,0.03,0.08,4.7,4,0,0.0,6,700,35,120,20,10,0,15,8,2
+Tier 2,35-44,Referral,Silver,Hair Care,Yes,75,2,1200,0.15,0.2,3.8,2,2,0.2,24,300,6,15,2,1,2,1,0,20
+Tier 2,25-34,Marketplace,Silver,Wellness,Yes,90,2,1500,0.1,0.25,3.5,2,1,0.1,20,250,8,18,3,1,2,1,1,25
+Tier 3,45+,Paid,Silver,Wellness,No,180,0,200,0.6,0.4,2.0,1,6,0.8,96,100,0,2,0,0,8,0,0,120
+Tier 3,45+,Paid,Silver,Hair Care,No,220,1,300,0.55,0.45,2.2,1,5,0.7,72,120,1,4,0,0,6,0,0,150
