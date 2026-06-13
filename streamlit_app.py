@@ -5,7 +5,7 @@ import requests
 import pandas as pd
 import streamlit as st
 
-API_URL = "part4-fastapi-churn-service-production.up.railway.app"
+API_URL = "https://part4-fastapi-churn-service-production.up.railway.app"
 
 st.set_page_config(
     page_title="D2C Customer Churn Prediction",
